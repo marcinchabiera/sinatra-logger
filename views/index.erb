@@ -27,8 +27,12 @@
     </div>
   <% else %>
     <div class="alert alert-info">
-      <strong>Example:</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
+      <small>
+      <strong>Example:</strong>
+      <li><samp><strong>[POST]</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
       http://34.218.240.238:4567/<strong>REQ123</strong>
+      <li><samp><strong>[GET]</strong> curl http://34.218.240.238:4567/<strong>REQ123</strong>
+      </small>
     </div>
   <% end %>
   <table class="table table-hover">
