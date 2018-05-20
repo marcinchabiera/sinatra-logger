@@ -4,6 +4,8 @@
 
 ## AWS
     sudo yum update
+    sudo yum install -y ruby24
+    sudo alternatives --set ruby /usr/bin/ruby2.4
     gem install bundle
     yum install git 
     git clone 

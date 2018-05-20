@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Requests Logger</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Requests Logger</h2>
+  <div class="alert alert-info">
+    <strong>Example:</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}' http://34.218.240.238:4567/<strong>REQ123</strong>
+  </div>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Request</th>
+      <th>Body</th>
+      <th>IP</th>
+      <th>Timestamp</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @list_of_requests.each do |request| %>
+      <tr>
+        <td><%= request[:method] %> <%= request[:url] %></td>
+        <td><%= request[:body] %></td>
+        <td><%= request[:ip] %></td>
+        <td><%= request[:timestamp] %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
