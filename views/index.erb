@@ -11,10 +11,26 @@
 <body>
 
 <div class="container">
-  <h2>Requests Logger</h2>
-  <div class="alert alert-info">
-    <strong>Example:</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}' http://34.218.240.238:4567/<strong>REQ123</strong>
-  </div>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Requests Logger</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+      </ul>
+    </div>
+  </nav>
+  <% if @error %>
+    <div class="alert alert-danger">
+      <strong>ERROR:</strong> <%= @error %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <strong>Example:</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
+      http://34.218.240.238:4567/<strong>REQ123</strong>
+    </div>
+  <% end %>
   <table class="table table-hover">
     <thead>
     <tr>

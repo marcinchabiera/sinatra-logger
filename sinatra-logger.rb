@@ -6,34 +6,26 @@ require 'erb'
 get '/' do
   @list_of_requests = []
   Dir["#{File.dirname(__FILE__)}/requests/*"].sort_by {|f| File.mtime(f)}.each do |file_name|
-    file_content = JSON.parse(File.read(file_name))
-    @list_of_requests <<
-        {
-            method: HTMLEntities.new.decode(file_content["method"]),
-            url: "#{file_content["url"]}",
-            timestamp: File.mtime(file_name),
-            ip: HTMLEntities.new.decode(file_content["ip"]),
-            body: HTMLEntities.new.decode(file_content["body"]),
-        }
+    @list_of_requests << parse_request_file(file_name)
   end
   status 200
   erb :index
 end
 
 get '/:req' do
+  @list_of_requests = []
   file_name = "#{File.dirname(__FILE__)}/requests/#{params['req']}"
   if File.exist?(file_name)
-    @html = File.read(file_name)
-    erb :index
+    status 200
+    parse_request_file(file_name)[:body]
   else
-    status 404
     @error = "404 NOT FOUND"
+    status 404
     erb :index
   end
 end
 
 post '/:req' do
-
   # remove old files - older then Xh
   remove_old_files
 
@@ -50,12 +42,25 @@ post '/:req' do
   file_content
 end
 
+
+def parse_request_file(file_name)
+  file_content = JSON.parse(File.read(file_name))
+  {
+      method: HTMLEntities.new.decode(file_content["method"]),
+      url: "#{file_content["url"]}",
+      timestamp: File.mtime(file_name),
+      ip: HTMLEntities.new.decode(file_content["ip"]),
+      body: HTMLEntities.new.decode(file_content["body"]),
+  }
+end
+
 def remove_old_files
   hours = 1
   Dir["#{File.dirname(__FILE__)}/requests/*"].sort_by {|f| File.mtime(f)}.each do |file_name|
     File.delete(file_name) if (Time.now - File.ctime(file_name)) / 3600 > hours # 1h
   end
 end
+
 
 # request.body              # request body sent by the client (see below)
 # request.scheme            # "http"
