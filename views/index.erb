@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93600109-3"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-93600109-3');
+  </script>
+
   <title>Requests Logger</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -27,12 +38,12 @@
     </div>
   <% else %>
     <div class="alert alert-info">
-      <small>
       <strong>Example:</strong>
-      <li><samp><strong>[POST]</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
-      http://34.218.240.238:4567/<strong>REQ123</strong>
-      <li><samp><strong>[GET]</strong> curl http://34.218.240.238:4567/<strong>REQ123</strong>
-      </small>
+      <ul>
+        <li><small><samp><strong>[POST]</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
+          http://reqs.mch.solutions/<strong>REQ123</strong></samp></small>
+        <li><small><samp><strong>[GET]</strong> curl http://reqs.mch.solutions/<strong>REQ123</strong></samp></small>
+      </ul>
     </div>
   <% end %>
   <table class="table table-hover table-sm">
@@ -48,7 +59,11 @@
     <% @list_of_requests.each do |request| %>
       <tr>
         <td class="text-nowrap"><%= request[:method] %> <a href="<%= request[:url] %>"><%= request[:url] %></a></td>
-        <td><%= request[:body] %></td>
+        <td width="70%">
+          <div class="form-group">
+            <textarea class="form-control input-sm" readonly><%= request[:body] %></textarea>
+          </div>
+        </td>
         <td class="text-nowrap"><%= request[:ip] %></td>
         <td class="text-nowrap"><%= request[:timestamp] %></td>
       </tr>

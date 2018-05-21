@@ -7,8 +7,11 @@ class App < Sinatra::Base
 
   get '/' do
     @list_of_requests = []
-    Dir["#{File.dirname(__FILE__)}/requests/*"].sort_by {|f| File.mtime(f)}.each do |file_name|
-      @list_of_requests << parse_request_file(file_name)
+    Dir["#{File.dirname(__FILE__)}/requests/*-INFO"].sort_by {|f| File.mtime(f)}.reverse.each do |file_name_info|
+      request_file_info = parse_request_file_info(file_name_info)
+      file_name_body = file_name_info.gsub(/-INFO$/,'-BODY')
+      request_file_info[:body] = File.read(file_name_body)
+      @list_of_requests << request_file_info
     end
     status 200
     erb :index
@@ -16,10 +19,10 @@ class App < Sinatra::Base
 
   get '/:req' do
     @list_of_requests = []
-    file_name = "#{File.dirname(__FILE__)}/requests/#{params['req']}"
-    if File.exist?(file_name)
+    file_name_body = "#{File.dirname(__FILE__)}/requests/#{params['req']}-BODY"
+    if File.exist?(file_name_body)
       status 200
-      parse_request_file(file_name)[:body]
+      File.read(file_name_body)
     else
       @error = "404 NOT FOUND"
       status 404
@@ -33,26 +36,31 @@ class App < Sinatra::Base
 
     dir_name = 'requests'
     Dir.mkdir(dir_name) unless File.exists?(dir_name)
+
+    # REQ INFO
     file_content = '{'
     file_content << '"url":"' + HTMLEntities.new.encode(request.url) + '",'
-    file_content << '"body":"' + HTMLEntities.new.encode(request.body.read) + '",'
     file_content << '"ip":"' + HTMLEntities.new.encode(request.ip) + '",'
     file_content << '"method":"' + HTMLEntities.new.encode(request.request_method) + '"'
     file_content << '}'
-    File.write("#{dir_name}/#{params['req']}", "#{file_content}")
+    File.write("#{dir_name}/#{params['req']}-INFO", "#{file_content}")
+
+    # REQ BODY
+    file_content = request.body.read
+    File.write("#{dir_name}/#{params['req']}-BODY", "#{file_content}")
+
     status 201
     file_content
   end
 
 
-  def parse_request_file(file_name)
+  def parse_request_file_info(file_name)
     file_content = JSON.parse(File.read(file_name))
     {
         method: HTMLEntities.new.decode(file_content["method"]),
         url: "#{file_content["url"]}",
         timestamp: File.mtime(file_name),
         ip: HTMLEntities.new.decode(file_content["ip"]),
-        body: HTMLEntities.new.decode(file_content["body"]),
     }
   end
 
