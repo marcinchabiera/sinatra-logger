@@ -47,7 +47,7 @@
     <tbody>
     <% @list_of_requests.each do |request| %>
       <tr>
-        <td class="text-nowrap"><%= request[:method] %> <%= request[:url] %></td>
+        <td class="text-nowrap"><%= request[:method] %> <a href="<%= request[:url] %>"><%= request[:url] %></a></td>
         <td><%= request[:body] %></td>
         <td class="text-nowrap"><%= request[:ip] %></td>
         <td class="text-nowrap"><%= request[:timestamp] %></td>

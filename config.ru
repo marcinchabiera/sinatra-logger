@@ -1,2 +1,2 @@
 require './sinatra-logger'
-run Sinatra::Application
+run App
