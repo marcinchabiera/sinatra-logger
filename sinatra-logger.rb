@@ -9,7 +9,7 @@ class App < Sinatra::Base
     @list_of_requests = []
     Dir["#{File.dirname(__FILE__)}/requests/*-INFO"].sort_by {|f| File.mtime(f)}.reverse.each do |file_name_info|
       request_file_info = parse_request_file_info(file_name_info)
-      file_name_body = file_name_info.gsub(/-INFO$/,'-BODY')
+      file_name_body = file_name_info.gsub(/-INFO$/, '-BODY')
       request_file_info[:body] = File.read(file_name_body)
       @list_of_requests << request_file_info
     end
@@ -23,6 +23,22 @@ class App < Sinatra::Base
     if File.exist?(file_name_body)
       status 200
       File.read(file_name_body)
+    else
+      @error = "404 NOT FOUND"
+      status 404
+      erb :index
+    end
+  end
+
+  delete '/:req' do
+    @list_of_requests = []
+    file_name_body = "#{File.dirname(__FILE__)}/requests/#{params['req']}-BODY"
+    if File.exist?(file_name_body)
+      file_body = File.read(file_name_body)
+      File.delete(file_name_body)
+      File.delete(file_name_body.gsub(/-BODY$/, '-INFO'))
+      status 200
+      file_body
     else
       @error = "404 NOT FOUND"
       status 404
