@@ -7,9 +7,9 @@ class App < Sinatra::Base
 
   get '/' do
     @list_of_requests = []
-    Dir["#{File.dirname(__FILE__)}/requests/*-INFO"].sort_by {|f| File.mtime(f)}.reverse.each do |file_name_info|
+    Dir["#{File.dirname(__FILE__)}/requests/*-INFO*"].sort_by {|f| File.mtime(f)}.reverse.each do |file_name_info|
       request_file_info = parse_request_file_info(file_name_info)
-      file_name_body = file_name_info.gsub(/-INFO$/, '-BODY')
+      file_name_body = file_name_info.gsub(/-INFO/, '-BODY')
       request_file_info[:body] = File.read(file_name_body)
       @list_of_requests << request_file_info
     end
@@ -19,7 +19,11 @@ class App < Sinatra::Base
 
   get '/:req' do
     @list_of_requests = []
-    file_name_body = "#{File.dirname(__FILE__)}/requests/#{params['req']}-BODY"
+    req_tab = params['req'].split('.')
+    record_number = req_tab.pop # remove last element and return this element
+    req = req_tab.join('.')
+    file_name_body = "#{File.dirname(__FILE__)}/requests/#{req}-BODY.#{record_number}"
+    file_name_body = "#{File.dirname(__FILE__)}/requests/#{req}-BODY" if !File.exist?(file_name_body)
     if File.exist?(file_name_body)
       status 200
       File.read(file_name_body)
@@ -32,11 +36,20 @@ class App < Sinatra::Base
 
   delete '/:req' do
     @list_of_requests = []
-    file_name_body = "#{File.dirname(__FILE__)}/requests/#{params['req']}-BODY"
-    if File.exist?(file_name_body)
-      file_body = File.read(file_name_body)
-      File.delete(file_name_body)
-      File.delete(file_name_body.gsub(/-BODY$/, '-INFO'))
+    file_name = "#{File.dirname(__FILE__)}/requests/#{params['req']}-INFO"
+    if File.exist?(file_name)
+      record_number = parse_request_file_info(file_name)[:record_number] - 1
+      File.delete(file_name)
+      file_name.gsub!(/-INFO/, '-BODY')
+      file_body = File.read(file_name)
+      File.delete(file_name)
+      puts "#{record_number}"
+      (1..record_number).each do |i|
+        file_name = "#{File.dirname(__FILE__)}/requests/#{params['req']}-INFO.#{i}"
+        puts "#{file_name}"
+        File.delete(file_name)
+        File.delete(file_name.gsub(/-INFO\./, '-BODY.'))
+      end
       status 200
       file_body
     else
@@ -50,14 +63,29 @@ class App < Sinatra::Base
     # remove old files - older then Xh
     remove_old_files
 
+    # Create requests folder if not exists
     dir_name = 'requests'
     Dir.mkdir(dir_name) unless File.exists?(dir_name)
 
+    # Store old record in history
+    record_number = 0
+    file_name = "#{dir_name}/#{params['req']}-INFO"
+    if File.exist?(file_name)
+      record_number = parse_request_file_info(file_name)[:record_number]
+      File.rename file_name, file_name + ".#{record_number}"
+    end
+    file_name = file_name.gsub!(/-INFO$/, '-BODY')
+    if File.exist?(file_name)
+      File.rename file_name, file_name + ".#{record_number}"
+    end
+
     # REQ INFO
+    record_number = record_number + 1
     file_content = '{'
     file_content << '"url":"' + HTMLEntities.new.encode(request.url) + '",'
     file_content << '"ip":"' + HTMLEntities.new.encode(request.ip) + '",'
-    file_content << '"method":"' + HTMLEntities.new.encode(request.request_method) + '"'
+    file_content << '"method":"' + HTMLEntities.new.encode(request.request_method) + '",'
+    file_content << '"record_number":' << "#{record_number}"
     file_content << '}'
     File.write("#{dir_name}/#{params['req']}-INFO", "#{file_content}")
 
@@ -77,6 +105,7 @@ class App < Sinatra::Base
         url: "#{file_content["url"]}",
         timestamp: File.mtime(file_name),
         ip: HTMLEntities.new.decode(file_content["ip"]),
+        record_number: file_content["record_number"],
     }
   end
 
