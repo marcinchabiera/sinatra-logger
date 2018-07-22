@@ -23,7 +23,7 @@ class App < Sinatra::Base
     record_number = req_tab.pop # remove last element and return this element
     req = req_tab.join('.')
     file_name_body = "#{File.dirname(__FILE__)}/requests/#{req}-BODY.#{record_number}"
-    file_name_body = "#{File.dirname(__FILE__)}/requests/#{req}-BODY" if !File.exist?(file_name_body)
+    file_name_body = "#{File.dirname(__FILE__)}/requests/#{params['req']}-BODY" if !File.exist?(file_name_body)
     if File.exist?(file_name_body)
       status 200
       File.read(file_name_body)
