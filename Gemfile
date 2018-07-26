@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
 gem 'sinatra'
 gem 'htmlentities'
+gem 'sinatra-logger', '>= 0.2.6'
 #ruby '2.1.2'

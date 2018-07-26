@@ -2,8 +2,12 @@ require 'sinatra'
 require 'htmlentities'
 require 'json'
 require 'erb'
+require 'sinatra/logger'
+require 'rack/protection'
 
 class App < Sinatra::Base
+
+  logger filename: "access123.log", level: :trace
 
   get '/' do
     @list_of_requests = []
