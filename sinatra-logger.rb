@@ -9,6 +9,10 @@ class App < Sinatra::Base
 
   logger filename: "access123.log", level: :trace
 
+  not_found do
+    'ERROR'
+  end
+
   get '/' do
     @list_of_requests = []
     Dir["#{File.dirname(__FILE__)}/requests/*-INFO*"].sort_by {|f| File.mtime(f)}.reverse.each do |file_name_info|
@@ -98,7 +102,14 @@ class App < Sinatra::Base
     file_content = request.body.read
     File.write("#{dir_name}/#{params['req']}-BODY", "#{file_content}")
 
-    status 201
+    # -return-status-XXX-
+    if params['req'].include?("-return-status-")
+      expected_status = params['req'].split('-return-status-')[1].split('-')[0]
+      status expected_status.to_i
+    else
+      status 201
+    end
+
     file_content
   end
 
