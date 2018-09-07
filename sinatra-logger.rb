@@ -100,6 +100,11 @@ class App < Sinatra::Base
 
     # REQ BODY
     file_content = request.body.read
+    file_content << "\n\n"
+    file_content << "--------------------------------------------------\n"
+    file_content << "ENV:\n"
+    file_content << "#{request.env}"
+    file_content << "<BR><BR>ENV:#{request.env}"
     File.write("#{dir_name}/#{params['req']}-BODY", "#{file_content}")
 
     # -return-status-XXX-
