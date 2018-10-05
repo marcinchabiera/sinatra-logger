@@ -1,2 +1,2 @@
-require './sinatra-logger'
+require './app'
 run App
