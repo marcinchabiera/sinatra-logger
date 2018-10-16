@@ -59,14 +59,14 @@
     <tbody>
     <% @list_of_requests.each do |request| %>
       <tr>
-        <td class="text-nowrap"><%= request[:method] %> <a href="<%= request[:url] %>.<%= request[:record_number] %>"><%= request[:url] %></a> [<%= request[:record_number] %>]</td>
+        <td><%= request[:method] %> <a href="<%= request[:url] %>.<%= request[:record_number] %>"><%= request[:url] %></a> [<%= request[:record_number] %>]</td>
         <td width="70%">
           <div class="form-group">
             <textarea class="form-control input-sm" readonly><%= request[:body] %></textarea>
           </div>
         </td>
-        <td class="text-nowrap"><%= request[:ip] %></td>
-        <td class="text-nowrap"><%= request[:timestamp] %></td>
+        <td><%= request[:ip] %></td>
+        <td><%= request[:timestamp] %></td>
       </tr>
     <% end %>
     </tbody>
