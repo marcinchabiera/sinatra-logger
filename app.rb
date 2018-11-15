@@ -46,10 +46,8 @@ delete '/:req' do
     file_name.gsub!(/-INFO/, '-BODY')
     file_body = File.read(file_name)
     File.delete(file_name)
-    puts "#{record_number}"
     (1..record_number).each do |i|
       file_name = "#{File.dirname(__FILE__)}/requests/#{params['req']}-INFO.#{i}"
-      puts "#{file_name}"
       File.delete(file_name)
       File.delete(file_name.gsub(/-INFO\./, '-BODY.'))
     end

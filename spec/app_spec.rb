@@ -25,6 +25,6 @@ describe "Sinatra Logger" do
 
   it "displays hello world text" do
     get "/"
-    expect(last_response.body).to include("curl")
+    expect(last_response.body).to include("hello")
   end
 end
