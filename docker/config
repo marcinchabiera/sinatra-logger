@@ -1,3 +1,0 @@
-VERSION=$(cat ./version)
-HUB_ADDRESS=hub.int.proofhq.com:5000
-IMAGE_NAME=${HUB_ADDRESS}/requests_logger

@@ -1,17 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93600109-3"></script>
-  <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'UA-93600109-3');
-  </script>
-
   <title>Requests Logger</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -38,21 +27,28 @@
     </div>
   <% else %>
     <div class="alert alert-info">
-      <strong>Example:</strong>
+      <strong>Examples:</strong>
       <ul>
-        <li><small><samp><strong>[POST]</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
-          https://wf-qa-requests-logger.appspot.com/<strong>REQ123</strong> [default response code: 201]</samp></small>
-        <li><small><samp><strong>[POST]</strong> curl --request POST --data '{"username":"xyz","password":"xyz"}'
-          https://wf-qa-requests-logger.appspot.com/<strong>REQ123-return-status-403</strong> [forced response code: 403]</samp></small>
-        <li><small><samp><strong>[GET]</strong> curl https://wf-qa-requests-logger.appspot.com/<strong>REQ123</strong></samp></small>
-        <li><small><samp><strong>[DELETE]</strong> curl -X DELETE https://wf-qa-requests-logger.appspot.com/<strong>REQ123</strong></samp></small>
+        <li><b>POST - SEND REQUEST</b> <small>[default response code: <b>201</b>]</small><br>
+          <samp>curl --request POST --data '{"username":"xyz","password":"xyz"}'
+          <%= url() %><b>REQ123</b></samp>
+          <br><br>
+        <li><b>POST - SEND REQUEST</b> <small>[with forced response code <b>XXX</b>, use suffix <b>-return-status-XXX</b> in request id]</small><br>
+          <samp>curl --request POST --data '{"username":"xyz","password":"xyz"}'
+          <%= url() %><strong>REQ123-return-status-403</strong></samp>
+          <br><br>
+        <li><b>GET - READ REQUEST</b><br>
+          <samp>curl <%= url() %><b>REQ123</b></samp>
+          <br><br>
+        <li><b>DELETE REQUEST</b><br>
+          <samp>curl -X DELETE <%= url() %><b>REQ123</b></samp>
       </ul>
     </div>
   <% end %>
   <table class="table table-hover table-sm">
     <thead>
     <tr>
-      <th>Request</th>
+      <th>Request [version]</th>
       <th>Body</th>
       <th>IP</th>
       <th>Timestamp</th>
