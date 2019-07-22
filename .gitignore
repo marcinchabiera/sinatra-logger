@@ -1,3 +1,4 @@
+.idea
 requests/*
 nohup.out
 *.log

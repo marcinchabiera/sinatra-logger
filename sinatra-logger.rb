@@ -7,7 +7,7 @@ require 'rack/protection'
 
 class App < Sinatra::Base
 
-  logger filename: "access123.log", level: :trace
+  logger filename: "access.log", level: :trace
 
   not_found do
     'ERROR'

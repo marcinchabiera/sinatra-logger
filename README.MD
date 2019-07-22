@@ -1,6 +1,6 @@
 ## Locally
-    rackup -p 4567
-    http://localhost:4567
+    bundle exec rackup -p 4567
+    open http://localhost:4567
 
 ## AWS - setup env manually
     sudo yum update
