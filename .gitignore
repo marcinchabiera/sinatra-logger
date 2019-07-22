@@ -1,4 +1,5 @@
 .idea
 app/requests/*
+app/Gemfile.lock
 nohup.out
 *.log

@@ -14,10 +14,10 @@ successfully_built_image_id=$(${docker} images | grep "${DOCKER_REGISTRY_URL}${c
 ${docker} tag ${successfully_built_image_id} ${DOCKER_REGISTRY_URL}${container_name}:${version}
 
 # PUSH IMAGES TO REPO
-${docker} push ${DOCKER_REGISTRY_URL}${container_name}:latest
-${docker} push ${DOCKER_REGISTRY_URL}${container_name}:${version}
+# ${docker} push ${DOCKER_REGISTRY_URL}${container_name}:latest
+# ${docker} push ${DOCKER_REGISTRY_URL}${container_name}:${version}
 
 # REMOVE LOCAL IMAGES
 docker images | grep ${container_name}
-${docker} rmi ${DOCKER_REGISTRY_URL}${container_name}:latest
-${docker} rmi ${DOCKER_REGISTRY_URL}${container_name}:${version}
+# ${docker} rmi ${DOCKER_REGISTRY_URL}${container_name}:latest
+# ${docker} rmi ${DOCKER_REGISTRY_URL}${container_name}:${version}

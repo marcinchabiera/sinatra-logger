@@ -4,7 +4,7 @@
     bundle exec ruby app.rb
     open http://localhost:4567
     
-### Build docket container
+### Build docker container
     ./build.sh
 
 ### Start app in docker container
