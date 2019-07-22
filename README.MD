@@ -4,14 +4,14 @@
     bundle exec ruby app.rb
     open http://localhost:4567
     
+### Build docket container
+    ./build.sh
+
 ### Start app in docker container
     docker run -it --rm --name requests_logger \
             -p 4567:4567 \
             -v "$PWD":/usr/src \
             requests_logger:latest
-    
-### Build docket container
-    ./build.sh
     
 ### Examples
 
