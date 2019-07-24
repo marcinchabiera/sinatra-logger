@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Requests Logger</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Requests Logger</a>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/">Home</a></li>
+      </ul>
+    </div>
+  </nav>
+  <% if @error %>
+    <div class="alert alert-danger">
+      <strong>ERROR:</strong> <%= @error %>
+    </div>
+  <% else %>
+    <div class="alert alert-info">
+      <strong>Examples:</strong>
+      <ul>
+        <li><b>POST - SEND REQUEST</b> <small>[default response code: <b>201</b>]</small><br>
+          <samp>curl --request POST --data '{"username":"xyz","password":"xyz"}'
+          <%= url() %><b>REQ123</b></samp>
+          <br><br>
+        <li><b>POST - SEND REQUEST</b> <small>[with forced response code <b>XXX</b>, use suffix <b>-return-status-XXX</b> in request id]</small><br>
+          <samp>curl --request POST --data '{"username":"xyz","password":"xyz"}'
+          <%= url() %><strong>REQ123-return-status-403</strong></samp>
+          <br><br>
+        <li><b>GET - READ REQUEST</b><br>
+          <samp>curl <%= url() %><b>REQ123</b></samp>
+          <br><br>
+        <li><b>DELETE REQUEST</b><br>
+          <samp>curl -X DELETE <%= url() %><b>REQ123</b></samp>
+      </ul>
+    </div>
+  <% end %>
+  <table class="table table-hover table-sm">
+    <thead>
+    <tr>
+      <th>Request [version]</th>
+      <th>Body</th>
+      <th>IP</th>
+      <th>Timestamp</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @list_of_requests.each do |request| %>
+      <tr>
+        <td><%= request[:method] %> <a href="<%= request[:url] %>.<%= request[:record_number] %>"><%= request[:url] %></a> [<%= request[:record_number] %>]</td>
+        <td width="70%">
+          <div class="form-group">
+            <textarea class="form-control input-sm" readonly><%= request[:body] %></textarea>
+          </div>
+        </td>
+        <td><%= request[:ip] %></td>
+        <td><%= request[:timestamp] %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
