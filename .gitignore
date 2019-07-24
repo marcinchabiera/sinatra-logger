@@ -1,5 +1,10 @@
 .idea
-requests/*
-Gemfile.lock
-nohup.out
-*.log
+local/requests/*
+local/Gemfile.lock
+local/nohup.out
+local/*.log
+
+docker/app/requests/*
+docker/app/Gemfile.lock
+docker/nohup.out
+docker/*.log
