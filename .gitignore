@@ -9,4 +9,4 @@ docker/app/Gemfile.lock
 docker/nohup.out
 docker/*.log
 
-gcloud/app/Gemfile.lock
+gcloud/Gemfile.lock
